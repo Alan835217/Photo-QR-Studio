@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Photo QR Studio</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%233b5bdb%22/%3E%3Cg fill=%22none%22 stroke=%22%23fff%22 stroke-width=%224%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2214%22 height=%2214%22 rx=%222%22/%3E%3Crect x=%2240%22 y=%2210%22 width=%2214%22 height=%2214%22 rx=%222%22/%3E%3Crect x=%2210%22 y=%2240%22 width=%2214%22 height=%2214%22 rx=%222%22/%3E%3C/g%3E%3Cg fill=%22%23fff%22%3E%3Crect x=%2215%22 y=%2215%22 width=%224%22 height=%224%22/%3E%3Crect x=%2245%22 y=%2215%22 width=%224%22 height=%224%22/%3E%3Crect x=%2215%22 y=%2245%22 width=%224%22 height=%224%22/%3E%3Crect x=%2229%22 y=%2210%22 width=%224%22 height=%224%22/%3E%3Crect x=%2229%22 y=%2218%22 width=%224%22 height=%224%22/%3E%3Crect x=%2210%22 y=%2229%22 width=%224%22 height=%224%22/%3E%3Crect x=%2218%22 y=%2229%22 width=%224%22 height=%224%22/%3E%3Ccircle cx=%2243%22 cy=%2243%22 r=%2211%22/%3E%3C/g%3E%3Ccircle cx=%2243%22 cy=%2240%22 r=%223.4%22 fill=%22%233b5bdb%22/%3E%3Cpath d=%22M35.8 51a7.2 7.2 0 0 1 14.4 0z%22 fill=%22%233b5bdb%22/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#3b5bdb">
+<meta name="description" content="Create a QR code with your photo in the center. Contact card, WiFi, WhatsApp, UPI, link, event and more. Free, private, runs in your browser.">
+<meta property="og:title" content="Photo QR Studio">
+<meta property="og:description" content="Create a QR code with your photo in the center. Runs in your browser.">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<style>
+:root{--bg:#f4f5f8;--card:#fff;--tx:#161a26;--mut:#667085;--bd:#e1e4ec;--ac:#3b5bdb;--acx:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10121a;--card:#1a1d29;--tx:#eef0f6;--mut:#9aa0b3;--bd:#2c3042;--ac:#7c93f5;--acx:#10131f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10121a;--card:#1a1d29;--tx:#eef0f6;--mut:#9aa0b3;--bd:#2c3042;--ac:#7c93f5;--acx:#10131f;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:18px 20px;border-bottom:1px solid var(--bd);background:var(--card);display:flex;align-items:center;gap:10px}
+header b{font-size:1.1rem}header span{color:var(--mut);font-size:.85rem}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--ac);color:var(--acx);display:grid;place-items:center;font-weight:700}
+.wrap{max-width:1020px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:860px){.wrap{grid-template-columns:1.1fr 1fr;align-items:start}.sticky{position:sticky;top:16px}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
+h2{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:0 0 12px}
+label{display:block;font-size:.82rem;font-weight:600;margin:10px 0 4px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=text],input[type=email],input[type=url],input[type=tel],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--ac);outline-offset:1px}
+textarea{min-height:70px;resize:vertical}
+input[type=color]{width:100%;height:38px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);padding:3px}
+input[type=range]{width:100%}
+.seg{display:flex;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:3px;gap:3px}
+[hidden]{display:none!important}
+input[type=datetime-local]{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{width:34px;height:34px;border-radius:50%;border:2px solid var(--bd);cursor:pointer;padding:0}.chip:hover{border-color:var(--ac)}
+#sheet{display:none}
+@media print{body>*:not(#sheet){display:none!important}#sheet{display:grid!important;grid-template-columns:repeat(3,1fr);gap:12mm;padding:10mm;background:#fff;color:#000}#sheet figure{margin:0;text-align:center;break-inside:avoid}#sheet img{width:100%}#sheet figcaption{font:600 12pt system-ui,sans-serif;margin-top:2mm}}
+.badge{margin-top:10px;font-size:.85rem;font-weight:600;color:var(--mut)}.badge.ok{color:#2f9e44}.badge.warn{color:#e8590c}
+.seg{flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.li img{width:44px;height:44px;border-radius:8px}.li span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.li .btn{flex:none;padding:6px 12px}
+.seg button{flex:1 1 30%;border:0;background:transparent;color:var(--mut);padding:8px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.seg button.on{background:var(--ac);color:var(--acx)}
+.drop{border:2px dashed var(--bd);border-radius:12px;padding:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.15s}
+.drop.over,.drop:hover{border-color:var(--ac);background:var(--bg)}
+.thumb{width:64px;height:64px;border-radius:12px;background:var(--bg);object-fit:cover;flex:none;display:grid;place-items:center;color:var(--mut);font-size:.7rem;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.btn{padding:11px 16px;border-radius:10px;border:0;background:var(--ac);color:var(--acx);font:inherit;font-weight:600;cursor:pointer;flex:1}
+.btn.sec{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.pv{text-align:center}
+canvas{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--bd);display:block;margin:0 auto}
+.empty{padding:60px 10px;color:var(--mut);border:2px dashed var(--bd);border-radius:12px}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:.8rem;margin-top:10px}
+.err{color:#d6336c;font-size:.88rem;margin-top:8px;min-height:1.2em}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(30px);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<header><svg width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#3b5bdb"/><g fill="none" stroke="#fff" stroke-width="4"><rect x="10" y="10" width="14" height="14" rx="2"/><rect x="40" y="10" width="14" height="14" rx="2"/><rect x="10" y="40" width="14" height="14" rx="2"/></g><g fill="#fff"><rect x="15" y="15" width="4" height="4"/><rect x="45" y="15" width="4" height="4"/><rect x="15" y="45" width="4" height="4"/><rect x="29" y="10" width="4" height="4"/><rect x="29" y="18" width="4" height="4"/><rect x="10" y="29" width="4" height="4"/><rect x="18" y="29" width="4" height="4"/><circle cx="43" cy="43" r="11"/></g><circle cx="43" cy="40" r="3.4" fill="#3b5bdb"/><path d="M35.8 51a7.2 7.2 0 0 1 14.4 0z" fill="#3b5bdb"/></svg><div><b>Photo QR Studio</b><br><span>Live preview · custom style · scannable contact cards</span></div><button class="btn sec" id="lang" style="flex:none;margin-left:auto;padding:8px 12px" aria-label="Language">हिं</button><button class="btn sec" id="theme" style="flex:none;padding:8px 12px" aria-label="Toggle theme">◐</button></header>
+<div class="wrap">
+<div>
+ <div class="card"><h2>1 · Content type</h2>
+  <div class="seg" id="mode"><button data-m="contact" class="on">Contact card</button><button data-m="text">Plain text</button><button data-m="link">Link</button><button data-m="wifi">WiFi</button><button data-m="whatsapp">WhatsApp</button><button data-m="upi">UPI pay</button><button data-m="email">Email</button><button data-m="geo">Location</button><button data-m="event">Event</button><button data-m="sms">SMS</button><button data-m="call">Call</button></div>
+  <p class="meta" id="modeHint" style="display:block;margin:8px 0 0">Phones offer “Add to contacts” when scanned.</p>
+ </div>
+ <div class="card"><h2>2 · Photo</h2>
+  <div class="drop" id="drop"><div class="thumb" id="thumb">No photo</div><div><b>Drop a photo or click to browse</b><br><span style="color:var(--mut);font-size:.82rem">JPG, PNG or WebP</span></div></div>
+  <input type="file" id="file" accept="image/*" hidden>
+ </div>
+ <div class="card" id="fcard"><h2>3 · Information</h2>
+ <div class="fp" data-p="contact">
+  <label for="c_name">Name *</label><input type="text" id="c_name" placeholder="Priya Sharma">
+  <div class="g2"><div><label for="c_phone">Phone</label><input type="tel" id="c_phone" placeholder="+91 98765 43210"></div>
+  <div><label for="c_email">Email</label><input type="email" id="c_email" placeholder="name@example.com"></div></div>
+  <label for="c_org">Company</label><input type="text" id="c_org" placeholder="Acme Ltd">
+ </div>
+ <div class="fp" data-p="text" hidden>
+  <label for="t_msg">Message / text *</label><textarea id="t_msg" placeholder="Type any text people will see when they scan"></textarea>
+ </div>
+ <div class="fp" data-p="link" hidden>
+  <label for="l_url">Website URL *</label><input type="url" id="l_url" placeholder="https://example.com">
+ </div>
+ <div class="fp" data-p="wifi" hidden>
+  <label for="w_ssid">Network name (SSID) *</label><input type="text" id="w_ssid" placeholder="MyNetwork">
+  <label for="w_pass">Password</label><input type="text" id="w_pass" placeholder="MyPassword" autocomplete="off">
+  <label for="w_enc">Encryption</label><select id="w_enc"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">None (open network)</option></select>
+ </div>
+ <div class="fp" data-p="whatsapp" hidden>
+  <div class="g2"><div><label for="wa_cc">Country code</label><input type="text" id="wa_cc" placeholder="+91" maxlength="6"></div>
+  <div><label for="wa_num">Phone number *</label><input type="tel" id="wa_num" placeholder="98765 43210"></div></div>
+  <label for="wa_msg">Pre-filled message</label><input type="text" id="wa_msg" placeholder="Hello there">
+ </div>
+ <div class="fp" data-p="upi" hidden>
+  <label for="u_vpa">UPI ID (VPA) *</label><input type="text" id="u_vpa" placeholder="name@upi">
+  <label for="u_name">Payee name</label><input type="text" id="u_name" placeholder="Priya Sharma">
+  <label for="u_amt">Amount (optional)</label><input type="text" id="u_amt" inputmode="decimal" placeholder="100">
+ </div>
+ <div class="fp" data-p="email" hidden>
+  <label for="e_to">Recipient email *</label><input type="email" id="e_to" placeholder="user@example.com">
+  <label for="e_sub">Subject</label><input type="text" id="e_sub" placeholder="Hello">
+  <label for="e_body">Body</label><textarea id="e_body" placeholder="Message text"></textarea>
+ </div>
+ <div class="fp" data-p="geo" hidden>
+  <div class="g2"><div><label for="g_lat">Latitude *</label><input type="text" id="g_lat" inputmode="decimal" placeholder="28.6139"></div>
+  <div><label for="g_lng">Longitude *</label><input type="text" id="g_lng" inputmode="decimal" placeholder="77.2090"></div></div>
+ </div>
+ <div class="fp" data-p="event" hidden>
+  <label for="ev_title">Event title *</label><input type="text" id="ev_title" placeholder="Team meeting">
+  <div class="g2"><div><label for="ev_start">Start date/time *</label><input type="datetime-local" id="ev_start"></div>
+  <div><label for="ev_end">End date/time</label><input type="datetime-local" id="ev_end"></div></div>
+  <label for="ev_loc">Location</label><input type="text" id="ev_loc" placeholder="Conference room">
+  <label for="ev_tz">Time zone handling</label><select id="ev_tz"><option value="utc">Convert to UTC (recommended)</option><option value="float">Floating local time</option></select>
+ </div>
+ <div class="fp" data-p="sms" hidden>
+  <label for="s_num">Phone number *</label><input type="tel" id="s_num" placeholder="+91 98765 43210">
+  <label for="s_msg">Message</label><input type="text" id="s_msg" placeholder="Hello there">
+  <label for="s_fmt">SMS format</label><select id="s_fmt"><option value="smsto">SMSTO (best for Android)</option><option value="sms">sms: (standard)</option></select>
+ </div>
+ <div class="fp" data-p="call" hidden>
+  <label for="k_num">Phone number *</label><input type="tel" id="k_num" placeholder="+91 98765 43210">
+ </div>
+ </div>
+ 
+<div class="card"><h2>4 · Style</h2>
+  <label>Quick palettes</label><div class="chips" id="pal"></div>
+  <div class="g2"><div><label for="fg">QR color</label><input type="color" id="fg" value="#1b2559"></div>
+  <div><label for="bg">Background</label><input type="color" id="bg" value="#ffffff"></div></div>
+  <div class="g2"><div><label for="dots">Dot style</label><select id="dots"><option value="rounded">Rounded</option><option value="square">Square</option><option value="dots">Circles</option></select></div>
+  <div><label for="shape">Photo shape</label><select id="shape"><option value="circle">Circle</option><option value="square">Rounded square</option></select></div></div>
+  <label for="size">Photo size</label><input type="range" id="size" min="14" max="28" value="22">
+  <label for="capt">Caption under QR (optional)</label><input type="text" id="capt" placeholder="Scan me" maxlength="40">
+  <label for="tpl">Card template</label><select id="tpl"><option value="classic">Classic</option><option value="dark">Dark</option><option value="gradient">Gradient</option></select>
+ </div>
+</div>
+<div class="sticky">
+ <div class="card pv"><h2>Live preview</h2>
+  <div class="empty" id="empty">Enter a name to see your QR code</div>
+  <canvas id="cv" width="800" height="800" hidden></canvas>
+  <div class="meta"><span id="cap"></span><span id="lvl">Error correction: High</span></div>
+  <div class="badge" id="chk"></div>
+  <div class="err" id="err"></div>
+  <div class="g2" style="margin-top:12px"><select id="px" aria-label="Size"><option value="512">512 px</option><option value="1024" selected>1024 px</option><option value="2048">2048 px</option><option value="4096">4096 px</option></select><select id="fmt" aria-label="Format"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp">WebP</option></select></div>
+  <div class="row"><button class="btn" id="dlQR" disabled>Download QR</button><button class="btn sec" id="dlCard" disabled>Download card</button></div>
+  <div class="row"><button class="btn sec" id="dlSVG" disabled>Download SVG</button><button class="btn sec" id="copy" disabled>Copy image</button><button class="btn sec" id="print" disabled>Print sheet</button><button class="btn sec" id="share" disabled>Share</button><button class="btn sec" id="reset">Reset</button></div>
+ </div>
+ 
+ 
+ <p class="meta" style="display:block">A QR code stores text, not pictures. Your photo appears in the center and on the card; the scan returns the information you entered. Always test-scan before printing.</p>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},img=null,mode='contact',curQR=null,t;
+function toast(m){var e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(t);t=setTimeout(function(){e.classList.remove('show')},1800)}
+function v(i){return $(i).value.trim()}
+function esc(s){return s.replace(/([,;\\])/g,'\\$1').replace(/\n/g,'\\n')}
+function payload(){
+ var g=function(i){return $(i).value.trim()};
+ switch(mode){
+ case 'contact':{var n=g('c_name');if(!n)return '';var pr=n.split(/\s+/),la=pr.length>1?pr.pop():'',c=['BEGIN:VCARD','VERSION:3.0','N:'+esc(la)+';'+esc(pr.join(' ')),'FN:'+esc(n)];
+  if(g('c_org'))c.push('ORG:'+esc(g('c_org')));if(g('c_phone'))c.push('TEL:'+g('c_phone'));if(g('c_email'))c.push('EMAIL:'+g('c_email'));c.push('END:VCARD');return c.join('\n')}
+ case 'text':return g('t_msg');
+ case 'link':{var u=g('l_url');return !u?'':/^[a-z][a-z0-9+.-]*:/i.test(u)?u:'https://'+u}
+ case 'wifi':{var ss=g('w_ssid'),en=$('w_enc').value,wx=function(t){return t.replace(/([\\;,:"])/g,'\\$1')};return ss?'WIFI:T:'+en+';S:'+wx(ss)+';'+(en==='nopass'?'':'P:'+wx($('w_pass').value)+';')+';':''}
+ case 'whatsapp':{var cc=g('wa_cc').replace(/\D/g,''),nu=g('wa_num').replace(/\D/g,'');if(cc)nu=cc+nu.replace(/^0+/,'');return nu?'https://wa.me/'+nu+(g('wa_msg')?'?text='+encodeURIComponent(g('wa_msg')):''):''}
+ case 'upi':{var a=g('u_vpa');if(!a)return '';var q='pa='+encodeURIComponent(a).replace('%40','@');if(g('u_name'))q+='&pn='+encodeURIComponent(g('u_name'));if(g('u_amt'))q+='&am='+encodeURIComponent(g('u_amt'));return 'upi://pay?'+q+'&cu=INR'}
+ case 'email':{var to=g('e_to');if(!to)return '';var qs=[];if(g('e_sub'))qs.push('subject='+encodeURIComponent(g('e_sub')));if(g('e_body'))qs.push('body='+encodeURIComponent(g('e_body')));return 'mailto:'+to+(qs.length?'?'+qs.join('&'):'')}
+ case 'geo':{var la2=g('g_lat'),lo=g('g_lng'),a1=Number(la2),a2=Number(lo);return la2!==''&&lo!==''&&isFinite(a1)&&isFinite(a2)&&Math.abs(a1)<=90&&Math.abs(a2)<=180?'geo:'+a1+','+a2:''}
+ case 'event':{var t=g('ev_title'),st=g('ev_start');if(!t||!st)return '';
+  var dt=function(x){if($('ev_tz').value==='utc'){var d=new Date(x);return isNaN(d)?'':d.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'')}return x.replace(/[-:]/g,'')+(x.length===16?'00':'')};
+  var ev=['BEGIN:VCALENDAR','VERSION:2.0','BEGIN:VEVENT','SUMMARY:'+esc(t),'DTSTART:'+dt(st)];if(g('ev_end'))ev.push('DTEND:'+dt(g('ev_end')));if(g('ev_loc'))ev.push('LOCATION:'+esc(g('ev_loc')));ev.push('END:VEVENT','END:VCALENDAR');return ev.join('\n')}
+ case 'sms':{var sn=g('s_num').replace(/[^\d+]/g,'');if(!sn)return '';var sm=g('s_msg');return $('s_fmt').value==='smsto'?'SMSTO:'+sn+':'+sm:'sms:'+sn+(sm?'?body='+encodeURIComponent(sm):'')}
+ case 'call':{var kn=g('k_num').replace(/[^\d+]/g,'');return kn?'tel:'+kn:''}
+ }
+ return '';
+}
+function cardInfo(){var g=function(i){return $(i).value.trim()};
+ switch(mode){
+ case 'contact':return{t:g('c_name'),s:g('c_org'),l:[g('c_phone'),g('c_email')]};
+ case 'text':return{t:g('t_msg').slice(0,40),s:'',l:[]};
+ case 'link':return{t:g('l_url').replace(/^https?:\/\//i,'').slice(0,30),s:'',l:[g('l_url')]};
+ case 'wifi':return{t:g('w_ssid'),s:'WiFi network',l:['Security: '+$('w_enc').value]};
+ case 'whatsapp':return{t:'WhatsApp',s:'',l:[(g('wa_cc')+' '+g('wa_num')).trim()]};
+ case 'upi':return{t:g('u_name')||'UPI payment',s:g('u_vpa'),l:[g('u_amt')?'Amount: \u20b9'+g('u_amt'):'']};
+ case 'email':return{t:g('e_to'),s:g('e_sub'),l:[]};
+ case 'geo':return{t:'Location',s:'',l:[g('g_lat')+', '+g('g_lng')]};
+ case 'event':return{t:g('ev_title'),s:g('ev_loc'),l:[g('ev_start').replace('T',' ')]};
+ case 'sms':return{t:'SMS',s:'',l:[g('s_num')]};
+ default:return{t:'Call',s:'',l:[g('k_num')]}}}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function cover(c,im,x,y,w,h){var s=Math.max(w/im.width,h/im.height),dw=im.width*s,dh=im.height*s;c.drawImage(im,x+(w-dw)/2,y+(h-dh)/2,dw,dh)}
+function inFinder(r,k,n){return (r<7&&k<7)||(r<7&&k>=n-7)||(r>=n-7&&k<7)}
+function drawQR(cv,S,qr,showPhoto){
+ var c=cv.getContext('2d'),n=qr.getModuleCount(),m=4,cell=S/(n+2*m),st=$('dots').value;
+ var cp=$('capt').value.trim(),H=cp?Math.round(S*1.1):S;cv.width=S;cv.height=H;c.fillStyle=$('bg').value;c.fillRect(0,0,S,H);c.fillStyle=$('fg').value;
+ if(cp){c.font='700 '+Math.round(S*.05)+'px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(cp.slice(0,40),S/2,S+(H-S)/2-S*.01);c.textAlign='left';c.textBaseline='alphabetic'}
+ for(var r=0;r<n;r++)for(var k=0;k<n;k++){if(!qr.isDark(r,k))continue;
+  var x=(k+m)*cell,y=(r+m)*cell;
+  if(st==='square'||inFinder(r,k,n)&&st!=='rounded')c.fillRect(Math.floor(x),Math.floor(y),Math.ceil(cell),Math.ceil(cell));
+  else if(st==='dots'){c.beginPath();c.arc(x+cell/2,y+cell/2,cell*.46,0,7);c.fill()}
+  else{rr(c,x,y,cell+.5,cell+.5,cell*.32);c.fill()}}
+ if(img&&showPhoto){var b=S*$('size').value/100,x0=(S-b)/2,pad=S*.014;
+  c.fillStyle=$('bg').value;
+  if($('shape').value==='circle'){c.beginPath();c.arc(S/2,S/2,b/2+pad,0,7);c.fill();c.save();c.beginPath();c.arc(S/2,S/2,b/2,0,7);c.clip();cover(c,img,x0,x0,b,b);c.restore()}
+  else{rr(c,x0-pad,x0-pad,b+2*pad,b+2*pad,b*.2);c.fill();c.save();rr(c,x0,x0,b,b,b*.17);c.clip();cover(c,img,x0,x0,b,b);c.restore()}}
+}
+function render(){
+ var text=payload(),ok=!!text;$('err').textContent='';$('empty').textContent='Fill in the details to see your QR code';draft();
+ ['dlQR','dlCard','copy','dlSVG','share','print'].forEach(function(i){$(i).disabled=!ok});
+ $('cv').hidden=!ok;$('empty').hidden=ok;$('cap').textContent=ok?text.length+' characters':'';
+ if(!ok){curQR=null;$('chk').textContent='';return}
+ try{if(qrcode.stringToBytesFuncs&&qrcode.stringToBytesFuncs['UTF-8'])qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];
+  var q=qrcode(0,'H');q.addData(text,'Byte');q.make();curQR=q;drawQR($('cv'),800,q,true);verify(text)}
+ catch(e){curQR=null;$('cv').hidden=true;$('empty').hidden=false;$('empty').textContent='Too much text for one QR code';$('err').textContent='Shorten the description or remove a field.';['dlQR','dlCard','copy','dlSVG','share','print'].forEach(function(i){$(i).disabled=true})}
+}
+function save(cv,name){var a=document.createElement('a');a.download=name;a.href=cv.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();toast('Downloaded')}
+function hi(){var x=$('fg').value;return x}
+function toSVG(){var q=curQR,n=q.getModuleCount(),m=4,S=n+2*m,st=$('dots').value,fg=$('fg').value,bg=$('bg').value,cp=$('capt').value.trim(),H=cp?S*1.1:S,s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+S+' '+H+'"><rect width="'+S+'" height="'+H+'" fill="'+bg+'"/><g fill="'+fg+'">';
+ for(var r=0;r<n;r++)for(var k=0;k<n;k++){if(!q.isDark(r,k))continue;var x=k+m,y=r+m;
+  if(st==='square'||inFinder(r,k,n)&&st!=='rounded')s+='<rect x="'+x+'" y="'+y+'" width="1.02" height="1.02"/>';
+  else if(st==='dots')s+='<circle cx="'+(x+.5)+'" cy="'+(y+.5)+'" r=".46"/>';
+  else s+='<rect x="'+x+'" y="'+y+'" width="1.02" height="1.02" rx=".32"/>'}
+ s+='</g>';
+ if(img){var b=S*$('size').value/100,o=(S-b)/2,p=S*.014,ci=$('shape').value==='circle',c=document.createElement('canvas');c.width=c.height=400;cover(c.getContext('2d'),img,0,0,400,400);
+  s+=ci?'<circle cx="'+S/2+'" cy="'+S/2+'" r="'+(b/2+p)+'" fill="'+bg+'"/><clipPath id="cp"><circle cx="'+S/2+'" cy="'+S/2+'" r="'+b/2+'"/></clipPath>':'<rect x="'+(o-p)+'" y="'+(o-p)+'" width="'+(b+2*p)+'" height="'+(b+2*p)+'" rx="'+b*.2+'" fill="'+bg+'"/><clipPath id="cp"><rect x="'+o+'" y="'+o+'" width="'+b+'" height="'+b+'" rx="'+b*.17+'"/></clipPath>';
+  s+='<image x="'+o+'" y="'+o+'" width="'+b+'" height="'+b+'" href="'+c.toDataURL('image/jpeg',.85)+'" clip-path="url(#cp)"/>'}
+ if(cp)s+='<text x="'+S/2+'" y="'+(S+(H-S)/2)+'" font-size="'+S*.05+'" font-weight="700" text-anchor="middle" dominant-baseline="central" fill="'+fg+'" font-family="system-ui,sans-serif">'+cp.slice(0,40).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</text>';
+ return s+'</svg>'}
+$('dlSVG').onclick=function(){var a=document.createElement('a');a.download='photo-qr.svg';a.href=URL.createObjectURL(new Blob([toSVG()],{type:'image/svg+xml'}));document.body.appendChild(a);a.click();a.remove();toast('Downloaded')};
+$('dlQR').onclick=function(){var c=document.createElement('canvas'),f=$('fmt').value;drawQR(c,+$('px').value,curQR,true);var a=document.createElement('a');a.download='photo-qr.'+(f==='jpeg'?'jpg':f);a.href=c.toDataURL('image/'+f,.95);document.body.appendChild(a);a.click();a.remove();toast('Downloaded')};
+$('dlCard').onclick=function(){
+ var W=1200,H=630,c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');
+ var tp=$('tpl').value;
+ if(tp==='gradient'){var gr=x.createLinearGradient(0,0,W,H);gr.addColorStop(0,hi());gr.addColorStop(1,'#0b0f1f');x.fillStyle=gr;x.fillRect(0,0,W,H)}
+ else if(tp==='dark'){x.fillStyle='#0f1220';x.fillRect(0,0,W,H);x.fillStyle=hi();x.fillRect(0,0,16,H)}
+ else{x.fillStyle=$('bg').value;x.fillRect(0,0,W,H);x.fillStyle=hi();x.fillRect(0,0,16,H)}
+ var tx=70;
+ if(img){x.save();x.beginPath();x.arc(170,170,100,0,7);x.clip();cover(x,img,70,70,200,200);x.restore();x.lineWidth=6;x.strokeStyle=hi();x.beginPath();x.arc(170,170,103,0,7);x.stroke()}
+ var dark=function(h){var n=parseInt(h.slice(1),16);return ((n>>16)*.3+((n>>8)&255)*.59+(n&255)*.11)<140};
+ x.fillStyle=(tp!=='classic'||dark($('bg').value))?'#fff':'#161a26';x.textBaseline='top';
+ var ci=cardInfo();x.font='700 46px system-ui,sans-serif';x.fillText(ci.t.slice(0,22),img?300:tx,img?110:70);
+ x.font='400 28px system-ui,sans-serif';x.globalAlpha=.7;if(ci.s)x.fillText(ci.s.slice(0,32),img?300:tx,img?172:132);x.globalAlpha=1;
+ var L=ci.l.filter(Boolean),y=330;x.font='400 27px system-ui,sans-serif';
+ L.slice(0,4).forEach(function(s){x.fillText(s.slice(0,38),tx,y);y+=46});
+ var q=document.createElement('canvas');drawQR(q,420,curQR,true);x.fillStyle='#fff';rr(x,W-480,105,420,q.height,24);x.fill();x.drawImage(q,W-480,105,420,q.height);
+ save(c,'photo-qr-card.png')};
+$('copy').onclick=function(){$('cv').toBlob(function(b){try{navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){toast('Copied')},function(){toast('Copy not allowed here')})}catch(e){toast('Copy not supported')}})};
+$('reset').onclick=function(){Array.prototype.forEach.call(document.querySelectorAll('.fp input,.fp textarea'),function(e){e.value=''});Array.prototype.forEach.call(document.querySelectorAll('.fp select'),function(e){e.selectedIndex=0});img=null;$('thumb').textContent='No photo';$('file').value='';render()};
+function load(f){if(!f||!/^image\//.test(f.type))return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){img=im;$('thumb').innerHTML='';var t=document.createElement('img');t.src=im.src;$('thumb').appendChild(t);render()};im.src=r.result};r.readAsDataURL(f)}
+var d=$('drop');d.onclick=function(){$('file').click()};$('file').onchange=function(e){load(e.target.files[0])};
+d.ondragover=function(e){e.preventDefault();d.classList.add('over')};d.ondragleave=function(){d.classList.remove('over')};
+d.ondrop=function(e){e.preventDefault();d.classList.remove('over');load(e.dataTransfer.files[0])};
+function modeUI(){Array.prototype.forEach.call(document.querySelectorAll('.fp'),function(p){p.hidden=p.dataset.p!==mode})}
+var hints={contact:'Scanning offers “Add to contacts”.',text:'Scanning shows your message as plain text.',link:'Scanning opens the website.',wifi:'Scanning offers to join the WiFi network.',whatsapp:'Scanning opens a WhatsApp chat.',upi:'Scanning opens a UPI payment app.',email:'Scanning opens a new email.',geo:'Scanning opens the location in a maps app.',event:'Scanning offers to add the event to the calendar.',sms:'Scanning opens a text message.',call:'Scanning starts a phone call.'};
+Array.prototype.forEach.call(document.querySelectorAll('#mode button'),function(b){b.onclick=function(){mode=b.dataset.m;Array.prototype.forEach.call(document.querySelectorAll('#mode button'),function(o){o.classList.toggle('on',o===b)});$('modeHint').textContent=hints[mode];modeUI();render()}});
+Array.prototype.forEach.call(document.querySelectorAll('input,textarea,select'),function(e){e.addEventListener('input',render)});
+var FLD=['c_name','c_phone','c_email','c_org','t_msg','l_url','w_ssid','w_enc','wa_cc','wa_num','wa_msg','u_vpa','u_name','u_amt','e_to','e_sub','e_body','g_lat','g_lng','ev_title','ev_start','ev_end','ev_loc','ev_tz','s_num','s_msg','s_fmt','k_num','fg','bg','dots','shape','size','capt'];
+function lum(h){var n=parseInt(h.slice(1),16),f=function(c){c/=255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)};return .2126*f(n>>16)+.7152*f((n>>8)&255)+.0722*f(n&255)}
+function cr(a,b){var x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+var vt;function verify(text){clearTimeout(vt);var e=$('chk');e.className='badge';e.textContent='Checking scan…';
+ vt=setTimeout(function(){try{var fg=$('fg').value,bg=$('bg').value,w=function(m){e.className='badge warn';e.textContent='⚠ '+m};
+  if(cr(fg,bg)<3)return w('Low contrast between QR and background. Use a darker QR color.');
+  if(lum(fg)>lum(bg))return w('Light-on-dark codes fail on some scanners. Prefer a dark QR on a light background.');
+  var cv=$('cv'),d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height),r=window.jsQR&&jsQR(d.data,d.width,d.height,{inversionAttempts:'attemptBoth'});
+  if(r&&r.data===text){e.className='badge ok';e.textContent='✓ Scan check passed: decoded back to your exact content'}
+  else w('Might be hard to scan. Try square dots, a smaller photo or less text.')}catch(x){e.textContent=''}},250)}
+$('share').onclick=function(){var c=document.createElement('canvas');drawQR(c,1000,curQR,true);c.toBlob(function(b){var f=new File([b],'photo-qr.png',{type:'image/png'});
+ if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:cardInfo().t||'QR code'}).catch(function(){});else toast('Sharing is not supported here. Use Download.')})};
+
+var PAL=[['#1b2559','#ffffff','Navy'],['#0b6e4f','#f1fbf6','Forest'],['#a4262c','#fff7f0','Crimson'],['#000000','#ffffff','Mono'],['#5b21b6','#faf5ff','Violet'],['#0e7490','#ecfeff','Teal']];
+PAL.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-label',p[2]+' palette');b.style.background='linear-gradient(135deg,'+p[0]+' 50%,'+p[1]+' 50%)';b.onclick=function(){$('fg').value=p[0];$('bg').value=p[1];render()};$('pal').appendChild(b)});
+$('theme').onclick=function(){var d=document.documentElement,dk=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;d.dataset.theme=dk?'light':'dark'};
+$('print').onclick=function(){var s=document.getElementById('sheet');if(!s){s=document.createElement('div');s.id='sheet';document.body.appendChild(s)}s.innerHTML='';
+ var c=document.createElement('canvas');drawQR(c,700,curQR,true);var u=c.toDataURL('image/png');
+ for(var i=0;i<12;i++){var f=document.createElement('figure'),im=new Image(),cp=document.createElement('figcaption');im.src=u;cp.textContent=cardInfo().t;f.appendChild(im);f.appendChild(cp);s.appendChild(f)}
+ setTimeout(function(){try{window.print()}catch(e){toast('Printing is not available here. Download the QR and print it.')}},200)};
+function draft(){try{var f={};FLD.forEach(function(k){f[k]=$(k).value});localStorage.setItem('pqr_draft',JSON.stringify({m:mode,f:f}))}catch(e){}}
+try{var dr=JSON.parse(localStorage.getItem('pqr_draft')||'null');if(dr&&dr.f&&document.querySelector('#mode button[data-m="'+dr.m+'"]')){mode=dr.m;Array.prototype.forEach.call(document.querySelectorAll('#mode button'),function(o){o.classList.toggle('on',o.dataset.m===mode)});$('modeHint').textContent=hints[mode]||'';FLD.forEach(function(k){if(dr.f[k]!=null)$(k).value=dr.f[k]})}}catch(e){}
+document.addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey)||!curQR)return;var k=e.key.toLowerCase();if(k==='d'){e.preventDefault();$('dlQR').click()}});
+var HI={"1 · Content type": "१ · सामग्री का प्रकार", "2 · Photo": "२ · फ़ोटो", "3 · Information": "३ · जानकारी", "4 · Style": "४ · शैली", "Live preview": "लाइव पूर्वावलोकन", "Contact card": "संपर्क कार्ड", "Plain text": "सादा टेक्स्ट", "Link": "लिंक", "WiFi": "वाईफाई", "WhatsApp": "व्हाट्सऐप", "UPI pay": "UPI भुगतान", "Email": "ईमेल", "Location": "स्थान", "Event": "इवेंट", "Call": "कॉल", "Drop a photo or click to browse": "फ़ोटो यहाँ डालें या क्लिक करें", "Name *": "नाम *", "Phone": "फ़ोन", "Company": "कंपनी", "Message / text *": "संदेश / टेक्स्ट *", "Website URL *": "वेबसाइट URL *", "Network name (SSID) *": "नेटवर्क नाम (SSID) *", "Password": "पासवर्ड", "Encryption": "एन्क्रिप्शन", "Country code": "देश कोड", "Phone number *": "फ़ोन नंबर *", "Pre-filled message": "पहले से भरा संदेश", "UPI ID (VPA) *": "UPI आईडी (VPA) *", "Payee name": "प्राप्तकर्ता का नाम", "Amount (optional)": "राशि (वैकल्पिक)", "Recipient email *": "प्राप्तकर्ता ईमेल *", "Subject": "विषय", "Body": "संदेश (बॉडी)", "Latitude *": "अक्षांश (Latitude) *", "Longitude *": "देशांतर (Longitude) *", "Event title *": "इवेंट का शीर्षक *", "Start date/time *": "शुरू होने की तारीख/समय *", "End date/time": "समाप्ति की तारीख/समय", "Time zone handling": "टाइम ज़ोन", "SMS format": "SMS फ़ॉर्मेट", "Message": "संदेश", "QR color": "QR का रंग", "Background": "पृष्ठभूमि", "Dot style": "डॉट शैली", "Photo shape": "फ़ोटो का आकार", "Photo size": "फ़ोटो का साइज़", "Quick palettes": "त्वरित रंग-योजना", "Card template": "कार्ड टेम्पलेट", "Download QR": "QR डाउनलोड करें", "Download card": "कार्ड डाउनलोड करें", "Download SVG": "SVG डाउनलोड करें", "Copy image": "इमेज कॉपी करें", "Print sheet": "प्रिंट शीट", "Share": "शेयर करें", "Reset": "रीसेट"},lang='en';
+function tr(){Array.prototype.forEach.call(document.querySelectorAll('h2,label,button,.drop b'),function(e){if(e.id==='lang'||e.id==='theme'||e.id==='xal'||e.id==='xbl'||e.classList.contains('chip'))return;if(e.dataset.en==null)e.dataset.en=e.textContent;var k=e.dataset.en;e.textContent=lang==='hi'&&HI[k]?HI[k]:k})}
+$('lang').onclick=function(){lang=lang==='en'?'hi':'en';tr();this.textContent=lang==='en'?'हिं':'EN';document.documentElement.lang=lang};
+modeUI();render();
+})();
+</script>
+</body>
+</html>
